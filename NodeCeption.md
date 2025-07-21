@@ -1,4 +1,7 @@
-# NodeCeption | TheHackersLabs
+# 🕵️‍♂️ NodeCeption | TheHackersLabs
+## ℹ️ Descripción
+Nodeception es un reto de pentesting que combina enumeración web, explotación de servicios en Node.js y análisis de configuraciones inseguras. Tu misión será descubrir credenciales ocultas en código fuente, acceder a un panel n8n mal protegido y escalar privilegios desde un flujo automatizado hasta obtener acceso como root. Ideal para practicar fuerza bruta, post-explotación y abuso de binarios con SUID o sudoers mal configurados.
+
 ## 📡 Reconocimiento
 ### 🌐 Descubrimiento de red
 Realicé un escaneo ARP para identificar los dispositivos en la red:
