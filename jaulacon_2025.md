@@ -29,7 +29,6 @@ http-generator: Bludit
 http-title: Bienvenido a Bludit | BLUDIT
 ```
 
----
 
 ## 🌐 2. Resolución del dominio
 
@@ -45,7 +44,6 @@ Se añadió una entrada en `/etc/hosts`:
 
 Así se pudo acceder correctamente al contenido web renderizado.
 
----
 
 ## 🔓 3. Descubrimiento de login
 
@@ -57,15 +55,13 @@ Tras enumerar rutas con `dirb`, se confirmó la ruta de administración:
 http://jaulacon2025.thl/admin
 ```
 
----
 
 ## 🢨 4. Fuerza bruta de login (CVE-2019-17240)
 
 Bludit 3.9.2 es vulnerable a bypass de limitación de intentos usando la cabecera `X-Forwarded-For`.
 
-### 🔧 Se usaron dos métodos:
+### 🔧 Se usó un script de Ruby encontrado en Exploit-DB:
 
-- Script en Python propio (con `--threads`, validación CSRF, multihilo)
 - Script en Ruby más robusto que resolvió correctamente el login
 
 ### ✅ Credenciales obtenidas:
@@ -75,7 +71,6 @@ Usuario: Jaulacon2025
 Contraseña: cassandra
 ```
 
----
 
 ## 📛 5. Explotación con Metasploit
 
@@ -95,7 +90,6 @@ Con los parámetros:
 
 Obtención de **una reverse shell como **``
 
----
 
 ## 🔎 6. Post-explotación: enumeración y cracking
 
@@ -115,7 +109,6 @@ Se intentó crackear con `john` usando el formato `dynamic_26` y `rockyou.txt`, 
 Hash: 551211bcd6ef18e32742a73fcb85430b → Password: Brutales
 ```
 
----
 
 ## 🔐 7. Acceso a usuario con contraseña crackeada
 
@@ -134,7 +127,6 @@ User JaulaCon2025 may run the following command:
 (root) NOPASSWD: /usr/bin/busctl
 ```
 
----
 
 ## ⚙️ 8. Explotación de `busctl` para obtener shell root
 
@@ -148,7 +140,6 @@ org.freedesktop.systemd1.Manager LogLevel s debug \
 
 Y se obtuvo una **shell interactiva como root**.
 
----
 
 ## 🏑️ 9. Flags obtenidas
 
