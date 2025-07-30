@@ -1,4 +1,4 @@
-# 🥪 CTF "Bocata de Calamares" | The HackersLabs
+# 🥪 Resolución del CTF "Bocata de Calamares" | The HackersLabs
 
 **Plataforma:** TheHackersLabs  
 **Nombre de la máquina:** Bocata de Calamares  
