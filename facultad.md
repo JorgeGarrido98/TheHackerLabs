@@ -1,4 +1,4 @@
-# 🧠 Resolución del CTF "Facultad" | The HackersLabs
+# 🧠 Resolución del CTF "Facultad" | TheHackersLabs
 
 **Plataforma:** TheHackersLabs\
 **Nombre de la máquina:** Facultad\
