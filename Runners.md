@@ -1,4 +1,4 @@
-# 🏃 Resolución del CTF "Runners" | The HackersLabs
+# 🏃 Resolución del CTF "Runners" | TheHackersLabs
 
 **Plataforma:** TheHackersLabs  
 **Nombre de la máquina:** Runners  
