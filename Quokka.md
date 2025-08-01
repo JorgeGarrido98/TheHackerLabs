@@ -1,4 +1,11 @@
-# 🏴‍☠️ Write-up — CTF Windows: Quokka
+# 🏴‍☠️ Resolución del CTF "Quokka" | TheHackersLabs
+
+**Plataforma:** TheHackersLabs  
+**Nombre de la máquina:** Quokka  
+**Dificultad:** Fácil  
+**Enfoque:** SMB, script permisos elevados, reverse shell, payload malicioso
+
+---
 
 ## 🔍 1. Escaneo de puertos
 
