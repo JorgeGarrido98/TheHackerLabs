@@ -10,15 +10,13 @@
 ## 🔍 1. Escaneo de puertos con Nmap
 
 ```bash
-nmap -p- -sS -sC -sV -Pn 192.168.1.127
+nmap -p- -- open -sS -sC -sV -- min-rate 5000 -n -vvV -Pn 172.20.10.6 -oN escaneo.txt
 ```
 
 Servicios detectados:
 
 - 22 → OpenSSH  
-- 80 → Apache HTTP  
-- 3306 → MySQL (luego descubierto)  
-- 7092 → Servicio interno accesible vía port forwarding
+- 80 → Apache HTTP
 
 ---
 
@@ -33,10 +31,21 @@ Con `gobuster` descubrimos rutas adicionales en `/wp-content`, `/wp-admin`, etc.
 ## 🔍 3. Enumeración WordPress con WPScan
 
 ```bash
-wpscan --url http://192.168.1.127
+wpscan -- url http://thefirstavenger.thl/wp1/ \
+-- passwords /usr/share/wordlists/rockyou.txt \
+-- usernames admin \
+-- disable-tls-checks \
+-- random-user-agent \
+-- max-threads 5 \
+-- throttle 1 \
+--no-update \
+-- no-banner
 ```
 
-Se detecta el usuario `admin` y se realiza fuerza bruta obteniendo una contraseña válida.
+Credenciales válidas encontradas:
+
+- Usuario: `admin`
+- Contraseña: `spongebob`
 
 ---
 
