@@ -1,4 +1,4 @@
-# 🛡️ Resolución del CTF "TheFirstAvenger" | The HackersLabs
+# 🛡️ Resolución del CTF "TheFirstAvenger" | TheHackersLabs
 
 **Plataforma:** TheHackersLabs  
 **Nombre de la máquina:** TheFirstAvenger  
