@@ -2,7 +2,7 @@
 
 **Plataforma:** TheHackersLabs  
 **Nombre de la máquina:** TheFirstAvenger  
-**Dificultad:** Alta  
+**Dificultad:** Fácil  
 **Enfoque:** Enumeración web, explotación WordPress, SSTI en Jinja2, port forwarding, escalada a root
 
 ---
@@ -12,6 +12,8 @@
 ```bash
 nmap -p- -- open -sS -sC -sV -- min-rate 5000 -n -vvV -Pn 172.20.10.6 -oN escaneo.txt
 ```
+
+<img width="818" height="515" alt="1-nmap" src="https://github.com/user-attachments/assets/fa796790-bb09-4f18-a08a-dcdffa81b4f8" /><br>
 
 Servicios detectados:
 
@@ -25,6 +27,8 @@ Servicios detectados:
 Página WordPress accesible → `/wp-login.php`
 
 Con `gobuster` descubrimos rutas adicionales en `/wp-content`, `/wp-admin`, etc.
+
+<img width="712" height="324" alt="3-gobuster2" src="https://github.com/user-attachments/assets/8ebc05bb-4ea0-49ff-9ec0-1383e4612442" />
 
 ---
 
@@ -41,6 +45,10 @@ wpscan -- url http://thefirstavenger.thl/wp1/ \
 --no-update \
 -- no-banner
 ```
+
+<img width="454" height="273" alt="5-wpscan" src="https://github.com/user-attachments/assets/c4c40cc3-ec48-450b-a154-7dfffa22c5d6" /><br>
+
+<img width="1115" height="338" alt="5-wpscan-password" src="https://github.com/user-attachments/assets/80953654-77a6-4d16-83c7-43ab3b4aef33" /><br>
 
 Credenciales válidas encontradas:
 
