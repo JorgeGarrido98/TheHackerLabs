@@ -99,17 +99,19 @@ Se conecta a MySQL y se accede a la base `topsecret`. Se recuperan hashes de usu
 
 ## 🔓 7. Cracking de hash
 
-Con `john` y `rockyou.txt` se crackea la contraseña del usuario `steve`.
+Con `john` y `rockyou.txt` se crackea la contraseña del usuario `steve`:
+
+<img width="507" height="113" alt="14-crackpasswd_john" src="https://github.com/user-attachments/assets/85427d60-06c8-4421-b4ab-e8f4f545b2a9" />
 
 ---
 
 ## 💻 8. Acceso SSH como `steve`
 
 ```bash
-ssh steve@192.168.1.127
+ssh steve@172.20.10.6
 ```
 
-<img width="507" height="113" alt="14-crackpasswd_john" src="https://github.com/user-attachments/assets/22c944c2-fb5c-4f31-a62d-1e7661ea18bb" />
+<img width="434" height="328" alt="15-ssh-steve" src="https://github.com/user-attachments/assets/b1ef09c0-6cd2-4dc7-9cca-9447ed176937" />
 
 ---
 
@@ -128,7 +130,7 @@ ss -tuln
 ## 🔄 10. Port Forwarding
 
 ```bash
-ssh -N -L 87092:127.0.0.1:7092 steve@192.168.1.127
+ssh -L 7092:127.0.0.1:7092 steve@172.20.10.6
 ```
 
 <img width="440" height="288" alt="17-port-forwarding" src="https://github.com/user-attachments/assets/0c792fe3-90f4-4df7-b6c6-0a030ab596d6" /><br>
