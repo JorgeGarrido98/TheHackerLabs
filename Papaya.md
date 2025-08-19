@@ -1,4 +1,4 @@
-# 🟠 Resolución del CTF "Papaya" | TheHackersLabs
+# 🥭 Resolución del CTF "Papaya" | TheHackersLabs
 
 **Plataforma:** TheHackersLabs  
 **Nombre de la máquina:** Papaya  
