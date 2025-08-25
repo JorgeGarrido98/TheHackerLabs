@@ -29,9 +29,11 @@ En el puerto 80 se encuentra es el código fuente un mensaje encriptado:
 
 <img width="1166" height="246" alt="2-puerto80-codigofuente" src="https://github.com/user-attachments/assets/5967e25f-e7fd-443f-b7e4-c5fcbe0d31d6" /><br>
 
-Se trata de una cadena cifrada con BrainFuck que con una herramienta en python creada por mi la desencriptamos:  
+Se trata de una cadena cifrada con BrainFuck que con una herramienta en python creada por mi la desencriptamos:
 
-<img width="872" height="62" alt="3-decrypt-bf" src="https://github.com/user-attachments/assets/063d2abd-3bec-4cea-85e2-6a3d658607f1" />
+<img width="872" height="62" alt="3-decrypt-bf" src="https://github.com/user-attachments/assets/063d2abd-3bec-4cea-85e2-6a3d658607f1" /><br>
+
+Herramienta -> https://github.com/JorgeGarrido98/bf-decoder.py/blob/main/bf-decoder.py
 
 ---
 
